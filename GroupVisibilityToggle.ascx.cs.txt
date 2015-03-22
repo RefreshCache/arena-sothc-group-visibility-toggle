@@ -1,0 +1,85 @@
+namespace ArenaWeb.UserControls.Custom.SOTH
+{
+	using System;
+	using System.IO;
+	using System.Text;
+	using System.Data;
+	using System.Drawing;
+	using System.Web;
+	using System.Web.UI;
+	using System.Web.UI.WebControls;
+	using System.Web.UI.HtmlControls;
+	using System.Web.Configuration;
+	using Arena.Portal;
+	using Arena.Portal.UI;
+	using Arena.Security;
+	using Arena.Exceptions;
+	using Arena.Core;
+    using Arena.SmallGroup;
+
+	public partial class GroupVisibilityToggle : PortalControl
+	{
+        private int groupId = -1;
+
+		protected void Page_Load(object sender, System.EventArgs e)
+		{
+            // get current group
+            if (Request["group"] != null)
+            {
+                groupId = Int32.Parse(Request["group"].ToString());
+            }
+            
+            if (!Page.IsPostBack)
+            {
+                // load group
+                Group group = new Group(groupId);
+
+                if (group.Private)
+                {
+                    lblCurrentGroupStatus.Text = "This group is currently marked private.";
+                    btnChangeStatus.Text = "Mark Group Public";
+                }
+                else
+                {
+                    lblCurrentGroupStatus.Text = "This group is currently marked public.";
+                    btnChangeStatus.Text = "Mark Group Private";
+                }
+			}
+		}
+
+		#region Event Handlers
+
+		// Perform update/add
+        protected void btnChangeStatus_Click(object sender, EventArgs e)
+		{
+            // load group
+            Group group = new Group(groupId);
+
+            if (group.Private)
+            {
+                // make group public
+                group.Private = false;
+                group.Save(Page.User.Identity.Name);
+
+                // reset labels
+                lblCurrentGroupStatus.Text = "This group is currently marked public.";
+                btnChangeStatus.Text = "Mark Group Private";
+            }
+            else
+            {
+                // make group private
+                group.Private = true;
+                group.Save(Page.User.Identity.Name);
+
+                // reset labels
+                lblCurrentGroupStatus.Text = "This group is currently marked private.";
+                btnChangeStatus.Text = "Mark Group Public";
+            }
+		}
+
+		#endregion
+	}
+}
+ 
+    
+    
