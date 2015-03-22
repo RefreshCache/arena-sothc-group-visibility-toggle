@@ -1,1 +1,1 @@
-# arena-sothc-group-visibility-toggle
+The Group Visibility Module is designed as an add-on to the Leader Toolbox permitting your group leader(s) to control the "Is This Group Private" checkbox from within the Leader Toolbox. It's ajaxy so there is no page refresh.
